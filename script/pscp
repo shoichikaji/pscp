@@ -1,0 +1,2 @@
+#!perl
+(require App::pscp)->run(@ARGV);
