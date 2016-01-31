@@ -13,8 +13,6 @@ our $VERSION = '0.01';
 my $HELP = <<___;
 
  Usage: pscp [options] source destination
-
- Options:
   -c, --concurrency=NUM  ssh concurrency, default: 5
   -v, --verbose          turn on verbose message
   -h, --help             show this help
