@@ -4,7 +4,7 @@
       "Shoichi Kaji <skaji@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 5.043, Dist::Milla version v1.0.15, CPAN::Meta::Converter version 2.150005",
+   "generated_by" : "Dist::Milla version v1.0.17, Dist::Zilla version 6.008, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "perl_5"
    ],
@@ -26,12 +26,12 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "0"
+            "Module::Build::Tiny" : "0.034"
          }
       },
       "develop" : {
          "requires" : {
-            "Dist::Milla" : "v1.0.15",
+            "Dist::Milla" : "v1.0.17",
             "Test::Pod" : "1.41"
          }
       },
@@ -53,16 +53,17 @@
    "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
-         "web" : "https://github.com/shoichikaji/pscp/issues"
+         "web" : "https://github.com/skaji/pscp/issues"
       },
-      "homepage" : "https://github.com/shoichikaji/pscp",
+      "homepage" : "https://github.com/skaji/pscp",
       "repository" : {
          "type" : "git",
-         "url" : "https://github.com/shoichikaji/pscp.git",
-         "web" : "https://github.com/shoichikaji/pscp"
+         "url" : "https://github.com/skaji/pscp.git",
+         "web" : "https://github.com/skaji/pscp"
       }
    },
    "version" : "0.01",
+   "x_serialization_backend" : "Cpanel::JSON::XS version 3.0225",
    "x_static_install" : "1"
 }
 
