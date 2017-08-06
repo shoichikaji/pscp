@@ -1,2 +1,6 @@
 #!perl
-(require App::pscp)->run(@ARGV);
+use strict;
+use App::pscp;
+
+exit App::pscp->run(@ARGV);
+

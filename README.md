@@ -1,34 +1,18 @@
-# pscp
+# NAME
 
-(WIP) parallel scp
+App::pscp - parallel scp
 
-## Install
+# SYNOPSIS
 
-Make sure you have [cpanm](https://github.com/miyagawa/cpanminus).
-If not, install it first:
+    > pscp file.txt 'example[01-10].com:file.txt'
 
-```sh
-$ curl -sL http://cpanmin.us | perl - -nq App::cpanminus
-```
+# DESCRIPTION
 
-Then:
+App::pscp is
 
-```sh
-$ cpanm -nq git://github.com/shoichikaji/pscp.git
-```
+# COPYRIGHT AND LICENSE
 
-## Usage
+Copyright 2016 Shoichi Kaji <skaji@cpan.org>
 
-```sh
-# copy local 'file.txt' to 10 remote hosts (example[01-10].com) in parallel
-pscp file.txt 'example[01-10].com:file.txt'
-
-# copy remote 'file.txt' to local file.txt.${host} in parallel
-pscp 'example.{com,jp}:file.txt' file.txt
-```
-
-## License
-
-Copyright (c) 2016 Shoichi Kaji
-
-This software is licensed under the same terms as Perl.
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.

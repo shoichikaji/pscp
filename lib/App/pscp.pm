@@ -13,7 +13,6 @@ our $VERSION = '0.01';
 my $HELP = <<___;
 
  Usage: pscp [options] source destination
-  -c, --concurrency=NUM  ssh concurrency, default: 5
   -v, --verbose          turn on verbose message
   -h, --help             show this help
       --version          show version
@@ -27,8 +26,8 @@ ___
 sub help { print STDERR $HELP and exit }
 
 sub new {
-    my $class = shift;
-    bless { concurrency => 5, @_ }, $class;
+    my ($class, %argv) = @_;
+    bless {%argv}, $class;
 }
 
 sub parse_options {
@@ -36,7 +35,6 @@ sub parse_options {
     my $parser = Getopt::Long::Parser->new;
     $parser->configure(qw(no_auto_abbrev no_ignore_case bundling));
     $parser->getoptionsfromarray(\@argv,
-        "c|concurrency=i" => \$self->{concurrency},
         "g|glob" => \$self->{glob},
         "h|help" => sub { $self->help },
         "version" => sub { printf "%s %s\n", ref $self, $self->VERSION and exit },
@@ -59,6 +57,8 @@ sub run {
     } elsif ($dest =~ s/^([^:]+)://) {
         $host_str = $1;
         $method = "scp_put";
+    } else {
+        die "Invalid srd or dest string\n";
     }
     my $ok = $self->pscp(
         hosts => [ String::Glob::Permute::string_glob_permute($host_str) ],
@@ -76,17 +76,13 @@ sub pscp {
     my $method = $option{method};
     my $src    = $option{source};
     my $dest   = $option{destination};
-    my $pm = Parallel::ForkManager->new($self->{concurrency});
-    my %result; $pm->run_on_finish(sub {
-        my ($pid, $exit, $host, $signal) = @_;
-        $result{$host} = $exit == 0 && !$signal ? 1 : 0;
-    });
-    for my $host (@$hosts) {
-        $pm->start($host) and next;
+
+    my $fail;
+    for my $host (sort @$hosts) {
         my ($ssh, $err) = $self->_ssh($host);
         if ($err) {
             warn "[$host] $err\n";
-            $pm->finish(1);
+            $fail++, last;
         }
         if ($method eq "scp_get") {
             if (-d $dest) {
@@ -99,15 +95,11 @@ sub pscp {
         warn "[$host] $method $src $dest\n" if $self->{verbose};
         my $option = { quiet => $self->{verbose} ? 0 : 1, glob => $self->{glob} };
         my $ok = $ssh->$method($option, $src, $dest);
-        $pm->finish( $ok ? 0 : 1 );
+        if (!$ok) {
+            $fail++, last;
+        }
     }
-    $pm->wait_all_children;
-    if (my @fail = grep { !$result{$_} } sort keys %result) {
-        warn "Failed in:\n";
-        warn "  \e[31m$_\e[m\n" for @fail;
-        return;
-    }
-    return 1;
+    !$fail;
 }
 
 sub _ssh {
@@ -127,8 +119,7 @@ sub _ssh {
     ($ssh, $err);
 }
 
-no warnings;
-__PACKAGE__;
+1;
 __END__
 
 =encoding utf-8
