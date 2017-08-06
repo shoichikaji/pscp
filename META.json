@@ -39,8 +39,7 @@
          "requires" : {
             "Getopt::Long" : "2.38",
             "Net::OpenSSH" : "0",
-            "String::Glob::Permute" : "0",
-            "perl" : "v5.8.5"
+            "String::Glob::Permute" : "0"
          }
       }
    },
