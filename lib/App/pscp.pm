@@ -1,12 +1,12 @@
 package App::pscp;
 use strict;
 use warnings;
-use Getopt::Long ();
-use Net::OpenSSH;
-use Parallel::ForkManager;
-use String::Glob::Permute ();
+
 use File::Basename ();
 use File::Spec;
+use Getopt::Long ();
+use Net::OpenSSH;
+use String::Glob::Permute ();
 
 our $VERSION = '0.01';
 
@@ -23,11 +23,9 @@ my $HELP = <<___;
 
 ___
 
-sub help { print STDERR $HELP and exit }
-
 sub new {
     my ($class, %argv) = @_;
-    bless {%argv}, $class;
+    bless { %argv }, $class;
 }
 
 sub parse_options {
@@ -36,7 +34,7 @@ sub parse_options {
     $parser->configure(qw(no_auto_abbrev no_ignore_case bundling));
     $parser->getoptionsfromarray(\@argv,
         "g|glob" => \$self->{glob},
-        "h|help" => sub { $self->help },
+        "h|help" => sub { print $HELP and exit },
         "version" => sub { printf "%s %s\n", ref $self, $self->VERSION and exit },
         "v|verbose" => \$self->{verbose},
     ) or return;
@@ -58,7 +56,7 @@ sub run {
         $host_str = $1;
         $method = "scp_put";
     } else {
-        die "Invalid srd or dest string\n";
+        die "Invalid src or dest string\n";
     }
     my $ok = $self->pscp(
         hosts => [ String::Glob::Permute::string_glob_permute($host_str) ],
