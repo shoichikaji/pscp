@@ -1,6 +1,6 @@
 # NAME
 
-App::pscp - parallel scp
+App::pscp - not parallel scp
 
 # SYNOPSIS
 

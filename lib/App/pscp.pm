@@ -126,7 +126,7 @@ __END__
 
 =head1 NAME
 
-App::pscp - parallel scp
+App::pscp - not parallel scp
 
 =head1 SYNOPSIS
 
